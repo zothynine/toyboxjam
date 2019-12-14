@@ -16,7 +16,8 @@ function setup()
   zone={
     x=64,
     y=64,
-    r=0
+    r=0,
+    ts=10 --target size
   }
 
   player={
@@ -25,8 +26,8 @@ function setup()
     w=8,
     h=8,
     idle={128,129},
-    si=1,
-    s=0
+    ai=1, --animation index
+    si=0 --sprite index
   }
 end
 
@@ -56,9 +57,10 @@ function udt_game()
 end
 
 function udt_zone()
-  zone.x=64
-  zone.y=64
-  zone.r=min(flr(t()),10)
+  local _z=zone
+  _z.x=64
+  _z.y=64
+  if (_z.r<10) _z.r+=1
 end
 
 function udt_player(ani)
@@ -90,7 +92,7 @@ end
 
 function drw_player(s)
   local _p=player
-  spr(_p.s,_p.x-_p.w/2,_p.y-_p.h/2)
+  spr(_p.si,_p.x-_p.w/2,_p.y-_p.h/2)
 end
 
 
@@ -100,9 +102,9 @@ end
 function animate(thing,ani)
   local _t=thing
   local _ani=_t[ani] or _t["idle"]
-  _t.s=_ani[_t.si]
-  if (f%15==0) _t.si+=1
-  if (_t.si>#_ani) _t.si=1
+  _t.si=_ani[_t.ai]
+  if (f%15==0) _t.ai+=1
+  if (_t.ai>#_ani) _t.ai=1
 end
 
 ------------------------------
