@@ -1,12 +1,15 @@
 pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
--- name of the game
+-- abduction center
 -- by Mario Zoth aka Zothy Nine
+
+-- ⬅️➡️⬆️⬇️❎🅾️
 -------------------------------
 function _init()
     _udt=udt_start
     _drw= drw_start
+    zone={}
 end
 
 -->8
@@ -18,6 +21,20 @@ end
 function _udt()end
 
 function udt_start()
+    if btnp(❎) then
+        _udt=udt_game
+        _drw=drw_game
+    end
+end
+
+function udt_game()
+    udt_zone()
+end
+
+function udt_zone()
+    zone.x=64
+    zone.y=64
+    zone.r=min(flr(t()),10)
 end
 
 
@@ -25,15 +42,28 @@ end
 --draw tab
 -------------------------------
 function _draw()
-    cls ()
+    cls(1)
     _drw()
 end
 function _drw()end
 
 function drw_start()
-    print("start screen")
+    print("press ❎ to start")
 end
 
+function drw_game()
+    drw_zone()
+end
+
+function drw_zone()
+    circfill(zone.x,zone.y,zone.r,12)
+end
+
+
+-->8
+--utilities tab
+-------------------------------
+function foo()end
 
 ------------------------------
 
