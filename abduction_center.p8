@@ -27,7 +27,8 @@ function setup()
     h=8,
     idle={128,129},
     ai=1, --animation index
-    si=0 --sprite index
+    si=0,--sprite index
+    spd=0.5, --player speed
   }
 end
 
@@ -94,7 +95,12 @@ end
 
 function drw_player(s)
   local _p=player
+  local _z=zone
   spr(_p.si,_p.x-_p.w/2,_p.y-_p.h/2)
+  if(btn(0) and _p.x-_p.w/2>_z.x-_z.r)_p.x-=_p.spd
+  if(btn(1) and _p.x+_p.w/2<_z.x+_z.r)_p.x+=_p.spd
+  if(btn(2) and _p.y-_p.h/2>_z.y-_z.r)_p.y-=_p.spd
+  if(btn(3) and _p.y+_p.h/2<_z.y+_z.r)_p.y+=_p.spd
 end
 
 
