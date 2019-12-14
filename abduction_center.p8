@@ -7,6 +7,7 @@ __lua__
 -- ⬅️➡️⬆️⬇️❎🅾️
 -------------------------------
 function _init()
+  f=0
   _udt=udt_start
   _drw= drw_start
 end
@@ -21,7 +22,10 @@ function setup()
   player={
     x=64,
     y=64,
+    w=8,
+    h=8,
     idle={128,129},
+    si=1,
     s=0
   }
 end
@@ -32,6 +36,8 @@ end
 -- update tab
 -------------------------------
 function _update60()
+  f+=1
+  if (f==59) f=0
   _udt()
 end
 function _udt()end
@@ -55,12 +61,8 @@ function udt_zone()
   zone.r=min(flr(t()),10)
 end
 
-function udt_player(state)
-  local _ani=player[state] or player.idle
-  local _i=1
-  player.s=_ani[_i]
-  _i+=1
-  if (_i>#_ani) _i=1
+function udt_player(ani)
+  animate(player,ani)
 end
 
 
@@ -87,14 +89,21 @@ function drw_zone()
 end
 
 function drw_player(s)
-  spr(player.s,player.x,player.y)
+  local _p=player
+  spr(_p.s,_p.x-_p.w/2,_p.y-_p.h/2)
 end
 
 
 -->8
 --utilities tab
 -------------------------------
-function foo()end
+function animate(thing,ani)
+  local _t=thing
+  local _ani=_t[ani] or _t["idle"]
+  _t.s=_ani[_t.si]
+  if (f%15==0) _t.si+=1
+  if (_t.si>#_ani) _t.si=1
+end
 
 ------------------------------
 
