@@ -7,34 +7,60 @@ __lua__
 -- ⬅️➡️⬆️⬇️❎🅾️
 -------------------------------
 function _init()
-    _udt=udt_start
-    _drw= drw_start
-    zone={}
+  _udt=udt_start
+  _drw= drw_start
 end
+
+function setup()
+  zone={
+    x=64,
+    y=64,
+    r=0
+  }
+
+  player={
+    x=64,
+    y=64,
+    idle={128,129},
+    s=0
+  }
+end
+
+
 
 -->8
 -- update tab
 -------------------------------
 function _update60()
-    _udt()
+  _udt()
 end
 function _udt()end
 
 function udt_start()
-    if btnp(❎) then
-        _udt=udt_game
-        _drw=drw_game
-    end
+  if btnp(❎) then
+    setup()
+    _udt=udt_game
+    _drw=drw_game
+  end
 end
 
 function udt_game()
-    udt_zone()
+  udt_zone()
+  udt_player("idle")
 end
 
 function udt_zone()
-    zone.x=64
-    zone.y=64
-    zone.r=min(flr(t()),10)
+  zone.x=64
+  zone.y=64
+  zone.r=min(flr(t()),10)
+end
+
+function udt_player(state)
+  local _ani=player[state] or player.idle
+  local _i=1
+  player.s=_ani[_i]
+  _i+=1
+  if (_i>#_ani) _i=1
 end
 
 
@@ -42,21 +68,26 @@ end
 --draw tab
 -------------------------------
 function _draw()
-    cls(1)
-    _drw()
+  cls(1)
+  _drw()
 end
 function _drw()end
 
 function drw_start()
-    print("press ❎ to start")
+  print("press ❎ to start")
 end
 
 function drw_game()
-    drw_zone()
+  drw_zone()
+  drw_player()
 end
 
 function drw_zone()
-    circfill(zone.x,zone.y,zone.r,12)
+  circfill(zone.x,zone.y,zone.r,12)
+end
+
+function drw_player(s)
+  spr(player.s,player.x,player.y)
 end
 
 
