@@ -87,7 +87,9 @@ function drw_game()
 end
 
 function drw_zone()
-  circfill(zone.x,zone.y,zone.r,12)
+  local _z=zone
+  rectfill(_z.x-_z.r,_z.y-_z.r,_z.x+_z.r,_z.y+_z.r,3)
+  rect(_z.x-_z.r,_z.y-_z.r,_z.x+_z.r,_z.y+_z.r,11)
 end
 
 function drw_player(s)
