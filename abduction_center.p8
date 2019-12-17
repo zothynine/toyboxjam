@@ -33,6 +33,7 @@ function setup()
     idle={1,2},
     run={5,6,7,8},
     zap={3,4},
+    shots={}
   }
 end
 
@@ -76,6 +77,11 @@ function udt_player(player)
   
   if btn(5) then
     _p.state="zap"
+    if f%10==0 then
+      local speed=3
+      if(_p.flip)speed=-3
+      add(_p.shots, {x=_p.x,y=_p.y-1,len=5,spd=speed})
+    end
   elseif btn()<0x0010 and btn()>0x0000 then
     _p.state="run"
     if btn(0) and _p.x-_p.w/2>_z.x-_z.r then
@@ -93,6 +99,18 @@ function udt_player(player)
   end
   
   animate(_p,ani)
+  udt_player_shots(_p.shots)
+end
+
+function udt_player_shots(shots)
+  if(#shots==0)return
+  for i=#shots,1,-1 do
+    local s=shots[i]
+    s.x+=s.spd
+    if s.x>127 or s.x<0-s.len then
+      del(shots,s)
+    end
+  end
 end
 
 
@@ -122,8 +140,15 @@ end
 
 function drw_player()
   local _p=player
-  local _z=zone
+  drw_player_shots(_p.shots)
   spr(_p.si,_p.x-_p.w/2,_p.y-_p.h/2,1,1,_p.flip)
+end
+
+function drw_player_shots(shots)  
+  for i=1,#shots do
+    local s=shots[i]
+    line(s.x, s.y,s.x+s.len,s.y,8)
+  end
 end
 
 
