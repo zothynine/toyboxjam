@@ -17,7 +17,7 @@ function setup()
     x=64,
     y=64,
     r=0,
-    ts=10 --target size
+    ts=6 --target size
   }
 
   player={
@@ -66,7 +66,8 @@ function udt_zone()
   local _z=zone
   _z.x=64
   _z.y=64
-  if (_z.r<10) _z.r+=1
+  if (_z.r<_z.ts) _z.r+=1
+  if (_z.r>_z.ts) _z.r-=1
 end
 
 function udt_player(player)
@@ -75,6 +76,7 @@ function udt_player(player)
   local state=_p.state
   local ani=_p.state or "idle"
   
+  -- if (btnp(4))_z.ts=6+rnd(60)
   if btn(5) then
     _p.state="zap"
     if f%10==0 then
@@ -92,7 +94,7 @@ function udt_player(player)
       _p.x+=_p.spd
       _p.flip=false
     end
-    if(btn(2) and _p.y>_z.y-_z.r/2-_p.h+1)_p.y-=_p.spd
+    if(btn(2) and _p.y>_z.y-flr(_z.r/2)-_p.h+3)_p.y-=_p.spd
     if(btn(3) and _p.y+_p.h/2<_z.y+_z.r)_p.y+=_p.spd
   else
     _p.state="idle"
@@ -148,7 +150,6 @@ function drw_player_shots(shots)
   for i=1,#shots do
     local s=shots[i]
     line(s.x, s.y,s.x+s.len,s.y,8)
-    print(#shots,5,5,8)
   end
 end
 
