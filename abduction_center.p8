@@ -92,7 +92,7 @@ function udt_player(player)
       _p.x+=_p.spd
       _p.flip=false
     end
-    if(btn(2) and _p.y-_p.h/2>_z.y-_z.r)_p.y-=_p.spd
+    if(btn(2) and _p.y>_z.y-_z.r/2-_p.h+1)_p.y-=_p.spd
     if(btn(3) and _p.y+_p.h/2<_z.y+_z.r)_p.y+=_p.spd
   else
     _p.state="idle"
@@ -148,6 +148,7 @@ function drw_player_shots(shots)
   for i=1,#shots do
     local s=shots[i]
     line(s.x, s.y,s.x+s.len,s.y,8)
+    print(#shots,5,5,8)
   end
 end
 
