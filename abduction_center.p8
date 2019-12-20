@@ -10,6 +10,7 @@ function _init()
   f=0
   _udt=udt_start
   _drw= drw_start
+  enemies={}
 end
 
 function setup()
@@ -35,6 +36,10 @@ function setup()
     zap={3,4},
     shots={}
   }
+
+  for i=1, 30 do
+    add(enemies,{x=0,y=0+rnd(119),w=8,h=8,spd=0.1+rnd(0.4)})
+  end
 end
 
 
@@ -59,7 +64,8 @@ end
 
 function udt_game()
   udt_zone()
-  udt_player(player)
+  udt_player()
+  udt_enemies()
 end
 
 function udt_zone()
@@ -70,12 +76,12 @@ function udt_zone()
   if (_z.r>_z.ts) _z.r-=1
 end
 
-function udt_player(player)
+function udt_player()
   local _p=player
   local _z=zone
   local state=_p.state
   local ani=_p.state or "idle"
-  
+
   -- if (btnp(4))_z.ts=6+rnd(60)
   if btn(5) then
     _p.state="zap"
@@ -99,7 +105,7 @@ function udt_player(player)
   else
     _p.state="idle"
   end
-  
+
   animate(_p,ani)
   udt_player_shots(_p.shots)
 end
@@ -112,6 +118,14 @@ function udt_player_shots(shots)
     if s.x>127 or s.x<0-s.len then
       del(shots,s)
     end
+  end
+end
+
+function udt_enemies()
+  for i=#enemies,1,-1 do
+    local e=enemies[i]
+    e.x+=e.spd
+    if (e.x>e.w+127) del(enemies,e)
   end
 end
 
@@ -132,6 +146,7 @@ end
 function drw_game()
   drw_zone()
   drw_player()
+  drw_enemies()
 end
 
 function drw_zone()
@@ -146,10 +161,18 @@ function drw_player()
   spr(_p.si,_p.x-_p.w/2,_p.y-_p.h/2,1,1,_p.flip)
 end
 
-function drw_player_shots(shots)  
+function drw_player_shots(shots)
   for i=1,#shots do
     local s=shots[i]
     line(s.x, s.y,s.x+s.len,s.y,8)
+    print(#enemies,5,5,8)
+  end
+end
+
+function drw_enemies()
+  for  i=1,#enemies do
+    local e=enemies[i]
+    rectfill(e.x,e.y,e.x+e.w,e.y+e.h,8)
   end
 end
 
