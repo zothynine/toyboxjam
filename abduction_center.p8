@@ -93,7 +93,7 @@ function udt_player()
     if f%10==0 then
       local speed=3
       if(_p.flip)speed=-3
-      add(_p.shots, {x=_p.x,y=_p.y-1,len=5,spd=speed})
+      add(_p.shots, {x=_p.x,y=_p.y-1,w=5,h=1,spd=speed})
     end
   elseif btn()<0x0010 and btn()>0x0000 then
     _p.state="run"
@@ -120,8 +120,18 @@ function udt_player_shots(shots)
   for i=#shots,1,-1 do
     local s=shots[i]
     s.x+=s.spd
-    if s.x>127 or s.x<0-s.len then
+
+    if s.x>127 or s.x<0-s.w then
       del(shots,s)
+    else
+      for i=#enemies,1,-1 do
+        local e=enemies[i]
+        if checkcollision(s.x,s.y,s.w,s.h,e.x,e.y,e.w,e.h) then
+          zone.ts+=1
+          del(enemies,e)
+          del(shots,s)
+        end
+      end
     end
   end
 end
@@ -130,7 +140,14 @@ function udt_enemies()
   for i=#enemies,1,-1 do
     local e=enemies[i]
     e.x+=e.spd
-    if (e.x>e.w+127+10 or e.x<0-e.w-10) del(enemies,e)
+    if e.x>127+10 then
+      e.x=0-e.w
+      e.y=0+rnd(119)
+    end
+    if e.x<0-e.w-10 then
+      e.x=127
+      e.y=0+rnd(119)
+    end
   end
 end
 
@@ -169,7 +186,7 @@ end
 function drw_player_shots(shots)
   for i=1,#shots do
     local s=shots[i]
-    line(s.x, s.y,s.x+s.len,s.y,8)
+    line(s.x, s.y,s.x+s.w,s.y,8)
     print(#enemies,5,5,8)
   end
 end
@@ -193,6 +210,14 @@ function animate(thing,ani)
   if (f%15==0) _t.ai+=1
   if (_t.ai>#_ani) _t.ai=1
 end
+
+function checkcollision(x1,y1,w1,h1, x2,y2,w2,h2)
+  return x1 < x2+w2 and
+         x2 < x1+w1 and
+         y1 < y2+h2 and
+         y2 < y1+h1
+end
+
 
 ------------------------------
 
