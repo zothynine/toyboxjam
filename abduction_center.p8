@@ -37,8 +37,13 @@ function setup()
     shots={}
   }
 
-  for i=1, 30 do
+  --enemies from the left
+  for i=1, 15 do
     add(enemies,{x=0,y=0+rnd(119),w=8,h=8,spd=0.1+rnd(0.4)})
+  end
+  --enemies from the right
+  for i=1, 15 do
+    add(enemies,{x=135,y=0+rnd(119),w=8,h=8,spd=-0.1-rnd(0.4)})
   end
 end
 
@@ -125,7 +130,7 @@ function udt_enemies()
   for i=#enemies,1,-1 do
     local e=enemies[i]
     e.x+=e.spd
-    if (e.x>e.w+127) del(enemies,e)
+    if (e.x>e.w+127+10 or e.x<0-e.w-10) del(enemies,e)
   end
 end
 
@@ -174,6 +179,7 @@ function drw_enemies()
     local e=enemies[i]
     rectfill(e.x,e.y,e.x+e.w,e.y+e.h,8)
   end
+  print(#enemies,5,5,8)
 end
 
 
