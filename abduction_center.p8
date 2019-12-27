@@ -94,6 +94,7 @@ function udt_player()
       local speed=3
       if(_p.flip)speed=-3
       add(_p.shots, {x=_p.x,y=_p.y+3,w=5,h=1,spd=speed})
+      sfx(2)
     end
   elseif btn()<0x0010 and btn()>0x0000 then
     _p.state="run"
