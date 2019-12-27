@@ -23,8 +23,8 @@ function setup()
 
   player={
     state="idle",
-    x=64,
-    y=64,
+    x=60,
+    y=60,
     w=8,
     h=8,
     ai=1, --animation index
@@ -93,20 +93,21 @@ function udt_player()
     if f%10==0 then
       local speed=3
       if(_p.flip)speed=-3
-      add(_p.shots, {x=_p.x,y=_p.y-1,w=5,h=1,spd=speed})
+      add(_p.shots, {x=_p.x,y=_p.y+3,w=5,h=1,spd=speed})
     end
   elseif btn()<0x0010 and btn()>0x0000 then
     _p.state="run"
-    if btn(0) and _p.x-_p.w/2>_z.x-_z.r then
+    if btn(0) and _p.x>_z.x-_z.r then
       _p.x-=_p.spd
       _p.flip=true
     end
-    if btn(1) and _p.x+_p.w/2<_z.x+_z.r then
+    if btn(1) and _p.x+_p.w<_z.x+_z.r then
       _p.x+=_p.spd
       _p.flip=false
     end
-    if(btn(2) and _p.y>_z.y-flr(_z.r/2)-_p.h+3)_p.y-=_p.spd
-    if(btn(3) and _p.y+_p.h/2<_z.y+_z.r)_p.y+=_p.spd
+    -- if(btn(2) and _p.y>_z.y-flr(_z.r/2)-_p.h+3)_p.y-=_p.spd
+    if(btn(2) and _p.y+_p.h>_z.y-_z.r+2)_p.y-=_p.spd
+    if(btn(3) and _p.y+_p.h<_z.y+_z.r)_p.y+=_p.spd
   else
     _p.state="idle"
   end
@@ -180,13 +181,14 @@ end
 function drw_player()
   local _p=player
   drw_player_shots(_p.shots)
-  spr(_p.si,_p.x-_p.w/2,_p.y-_p.h/2,1,1,_p.flip)
+  spr(_p.si,_p.x,_p.y,1,1,_p.flip)
+  pset(_p.x,_p.y,10)
 end
 
 function drw_player_shots(shots)
   for i=1,#shots do
     local s=shots[i]
-    line(s.x, s.y,s.x+s.w,s.y,8)
+    line(s.x,s.y,s.x+s.w,s.y,8)
     print(#enemies,5,5,8)
   end
 end
